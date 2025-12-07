@@ -1,28 +1,38 @@
 import 'package:flutter/material.dart';
-import 'profile_screen.dart';
+import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
+
 import '../models/user.dart';
 import '../models/song.dart';
+import 'profile_screen.dart';
 
-Route createProfileRoute(User user) {
-  return PageRouteBuilder(
-    opaque: false, 
-    barrierColor: Colors.transparent,
-    transitionDuration: const Duration(milliseconds: 0),
-    pageBuilder: (context, animation, secondaryAnimation) {
-      return ProfileScreen(user: user);
-    },
-  );
-}
-
-
-class MapScreen extends StatelessWidget {
+class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // usuario dummy para probar navegación
-    final user = User(
-      id: '1',
+  State<MapScreen> createState() => _MapScreenState();
+}
+
+class _MapScreenState extends State<MapScreen> {
+  late MapController _mapController;
+
+  // Usuario dummy que usaremos como "usuario actual"
+  late final User _currentUser;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // controlador del mapa usando la posición del usuario
+    _mapController = MapController.withUserPosition(
+      trackUserLocation: const UserTrackingOption(
+        enableTracking: true,
+        unFollowUser: false,
+      ),
+    );
+
+    // usuario de ejemplo (puedes mover esto luego a DummyDataService)
+    _currentUser = User(
+      id: 'me',
       name: 'Purple',
       description: 'Example description based on last song played.',
       avatarColorHex: '#A855F7',
@@ -33,18 +43,74 @@ class MapScreen extends StatelessWidget {
         (i) => Song(title: 'Song $i', artist: 'Artist $i'),
       ),
     );
+  }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Sound Radar Map'),
+  @override
+  void dispose() {
+    _mapController.dispose();
+    super.dispose();
+  }
+
+  void _goToProfile() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => ProfileScreen(user: _currentUser),
       ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.of(context).push(createProfileRoute(user));
-          },
-          child: const Text('Ir al perfil de ejemplo'),
-        ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Stack(
+        children: [
+          // 🗺️ MAPA OSM OCUPANDO TODA LA PANTALLA
+          OSMFlutter(
+            controller: _mapController,
+            osmOption: OSMOption(
+              userTrackingOption: const UserTrackingOption(
+                enableTracking: true,
+                unFollowUser: false,
+              ),
+              zoomOption: const ZoomOption(
+                initZoom: 16,
+                minZoomLevel: 3,
+                maxZoomLevel: 19,
+                stepZoom: 1.0,
+              ),
+              userLocationMarker: UserLocationMaker(
+                personMarker: const MarkerIcon(
+                  icon: Icon(
+                    Icons.person_pin_circle,
+                    color: Colors.purpleAccent,
+                    size: 48,
+                  ),
+                ),
+                directionArrowMarker: const MarkerIcon(
+                  icon: Icon(
+                    Icons.navigation,
+                    size: 36,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ),
+
+          // 🔘 BOTÓN DE PERFIL ABAJO A LA DERECHA
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: FloatingActionButton(
+                heroTag: 'profile_button',
+                onPressed: _goToProfile,
+                backgroundColor: const Color(0xFF3F3F46),
+                child: const Icon(Icons.person),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
