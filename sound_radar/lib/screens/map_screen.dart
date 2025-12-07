@@ -3,6 +3,18 @@ import 'profile_screen.dart';
 import '../models/user.dart';
 import '../models/song.dart';
 
+Route createProfileRoute(User user) {
+  return PageRouteBuilder(
+    opaque: false, 
+    barrierColor: Colors.transparent,
+    transitionDuration: const Duration(milliseconds: 0),
+    pageBuilder: (context, animation, secondaryAnimation) {
+      return ProfileScreen(user: user);
+    },
+  );
+}
+
+
 class MapScreen extends StatelessWidget {
   const MapScreen({super.key});
 
@@ -29,12 +41,7 @@ class MapScreen extends StatelessWidget {
       body: Center(
         child: ElevatedButton(
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => ProfileScreen(user: user),
-              ),
-            );
+            Navigator.of(context).push(createProfileRoute(user));
           },
           child: const Text('Ir al perfil de ejemplo'),
         ),

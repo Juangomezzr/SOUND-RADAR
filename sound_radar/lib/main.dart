@@ -15,7 +15,7 @@ class SoundRadarApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Sound Radar',
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: false,  
       theme: AppTheme.dark,
       initialRoute: '/login',
       routes: {
