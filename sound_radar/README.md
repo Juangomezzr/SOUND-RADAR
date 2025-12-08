@@ -1,3 +1,3 @@
 # sound_radar
 
-A new Flutter project.
+NTUA Human-Conputer Interaction Project 
