@@ -86,16 +86,16 @@ class _MapScreenState extends State<MapScreen> {
           id: 'u1',
           name: 'Alex',
           description: 'Nearby music lover.',
-          avatarColorHex: '#22C55E',
+          avatarColorHex: '#7C3AED',
           instagram: 'https://instagram.com/alex',
           xLink: 'https://x.com/alex',
           lastSongs: [Song(title: 'As It Was', artist: 'Harry Styles')],
         ),
         User(
           id: 'u2',
-          name: 'Sara',
+          name: 'Saro',
           description: 'Always discovering new sounds.',
-          avatarColorHex: '#06B6D4',
+          avatarColorHex: '#22C55E',
           instagram: 'https://instagram.com/sara',
           xLink: 'https://x.com/sara',
           lastSongs: [Song(title: 'Levitating', artist: 'Dua Lipa')],
@@ -145,6 +145,12 @@ class _MapScreenState extends State<MapScreen> {
     });
   }
 
+  Color _colorFromHex(String hex) {
+  final buffer = StringBuffer();
+  if (hex.length == 7) buffer.write('ff');
+  buffer.write(hex.replaceFirst('#', ''));
+  return Color(int.parse(buffer.toString(), radix: 16));
+}
   void _centerOnUser() {
     if (_myLatLng == null) return;
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -256,9 +262,8 @@ class _MapScreenState extends State<MapScreen> {
       );
     }
 
-    // 🖤 Mapa oscuro/minimal: CARTO Dark Matter
     const tilesUrl =
-        'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
+        'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
     const subs = ['a', 'b', 'c', 'd'];
 
     return Scaffold(
@@ -278,7 +283,7 @@ class _MapScreenState extends State<MapScreen> {
               ),
               MarkerLayer(
                 markers: [
-                  // 🔴 tu ubicación (punto rojo)
+                  // my location
                   Marker(
                     point: _myLatLng!,
                     width: 22,
@@ -286,10 +291,11 @@ class _MapScreenState extends State<MapScreen> {
                     child: const Icon(Icons.circle, color: Colors.red, size: 18),
                   ),
 
-                  // 👥 usuarios cercanos dummy
+                  // dummy users
                   ...List.generate(_nearbyUsers.length, (i) {
                     final user = _nearbyUsers[i];
                     final point = _nearbyPositions[i];
+                    final userColor = _colorFromHex(user.avatarColorHex);
 
                     return Marker(
                       point: point,
@@ -300,7 +306,7 @@ class _MapScreenState extends State<MapScreen> {
                         child: Container(
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: const Color(0xFF3F3F46),
+                            color: userColor,
                             border: Border.all(color: Colors.white24, width: 2),
                           ),
                           child: Center(
