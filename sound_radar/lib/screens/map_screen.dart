@@ -59,6 +59,20 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 
+  void _centerOnUser() async {
+    try {
+      // centra el mapa en la ubicación actual del usuario
+      await _mapController.currentLocation();
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('No se pudo centrar en tu ubicación'),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,7 +81,11 @@ class _MapScreenState extends State<MapScreen> {
           // 🗺️ MAPA OSM OCUPANDO TODA LA PANTALLA
           OSMFlutter(
             controller: _mapController,
+            
             osmOption: OSMOption(
+            
+
+              
               userTrackingOption: const UserTrackingOption(
                 enableTracking: true,
                 unFollowUser: false,
@@ -94,22 +112,36 @@ class _MapScreenState extends State<MapScreen> {
                   ),
                 ),
               ),
-            ),
+             
+              ),
           ),
 
-          // 🔘 BOTÓN DE PERFIL ABAJO A LA DERECHA
-          Align(
-            alignment: Alignment.bottomRight,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: FloatingActionButton(
+              // 🔘 BOTONES ABAJO A LA DERECHA (centrar + perfil)
+      Align(
+        alignment: Alignment.bottomRight,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              FloatingActionButton(
+                heroTag: 'center_button',
+                onPressed: _centerOnUser,
+                backgroundColor: const Color(0xFF3F3F46),
+                child: const Icon(Icons.my_location),
+              ),
+              const SizedBox(height: 12),
+              FloatingActionButton(
                 heroTag: 'profile_button',
                 onPressed: _goToProfile,
                 backgroundColor: const Color(0xFF3F3F46),
                 child: const Icon(Icons.person),
               ),
-            ),
+            ],
           ),
+        ),
+      ),
+
         ],
       ),
     );
