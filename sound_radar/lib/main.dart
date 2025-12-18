@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'theme/app_theme.dart';
 import 'screens/login_screen.dart';
-import 'screens/register_screen.dart';
 import 'screens/map_screen.dart';
 
 void main() {
@@ -20,7 +19,6 @@ class SoundRadarApp extends StatelessWidget {
       initialRoute: '/login',
       routes: {
         '/login': (_) => const LoginScreen(),
-        '/register': (_) => const RegisterScreen(),
         '/map': (_) => const MapScreen(),
       },
     );
