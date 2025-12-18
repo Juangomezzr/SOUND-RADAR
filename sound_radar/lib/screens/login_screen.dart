@@ -28,86 +28,81 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    const background = Color(0xFF18181B);
+    const fieldFill = Color(0xFF3F3F46);
 
     return Scaffold(
-      body: Stack(
-        children: [
-          const DecoratedBox(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color(0xFF2A2D3A),
-                  Color(0xFF202333),
-                  Color(0xFF171A26),
-                  Color(0xFF10121A),
-                ],
-                stops: [0.0, 0.35, 0.7, 1.0],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-            ),
-            child: SizedBox.expand(),
-          ),
-          Center(
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text(
-                    'Sound Radar',
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
+      backgroundColor: background,
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Sound Radar',
+                  style: theme.textTheme.headlineMedium?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ) ??
+                      const TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
+                ),
+                const SizedBox(height: 24),
+                AuthCard(
+                  title: '',
+                  children: [
+                    TextField(
+                      controller: _usernameController,
+                      decoration: InputDecoration(
+                        labelText: 'Username',
+                        filled: true,
+                        fillColor: fieldFill,
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 24),
-                  AuthCard(
-                    title: '',
-                    children: [
-                      TextField(
-                        controller: _usernameController,
-                        decoration: const InputDecoration(
-                          labelText: 'Username',
-                          filled: true,
-                          fillColor: Color(0xFF3F3F46),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(8)),
-                            borderSide: BorderSide.none,
-                          ),
+                    const SizedBox(height: 12),
+                    TextField(
+                      controller: _passwordController,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        labelText: 'Password',
+                        filled: true,
+                        fillColor: fieldFill,
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                          borderSide: BorderSide.none,
                         ),
                       ),
-                      const SizedBox(height: 12),
-                      TextField(
-                        controller: _passwordController,
-                        obscureText: true,
-                        decoration: const InputDecoration(
-                          labelText: 'Password',
-                          filled: true,
-                          fillColor: Color(0xFF3F3F46),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(8)),
-                            borderSide: BorderSide.none,
-                          ),
+                    ),
+                    const SizedBox(height: 16),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          elevation: 0,
+                          shadowColor: Colors.transparent,
                         ),
+                        onPressed: () {
+                          Navigator.pushReplacementNamed(context, '/map');
+                        },
+                        child: const Text('Login'),
                       ),
-                      const SizedBox(height: 16),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.pushReplacementNamed(context, '/map');
-                          },
-                          child: const Text('Login'),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }

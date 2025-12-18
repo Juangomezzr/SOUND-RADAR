@@ -12,42 +12,43 @@ class AuthCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 320,
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: const Color(0xFF121522),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: Colors.white.withValues(alpha: 0.06),
-          width: 1,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.18),
-            blurRadius: 28,
-            offset: const Offset(0, 16),
-          ),
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
+    final theme = Theme.of(context);
+    final borderColor = theme.colorScheme.outline.withValues(alpha: 0.18);
+    final radius = BorderRadius.circular(16);
+
+    return Material(
+      color: const Color(0xFF27272A),
+      elevation: 1,
+      shadowColor: Colors.black.withValues(alpha: 0.14),
+      shape: RoundedRectangleBorder(
+        borderRadius: radius,
+        side: BorderSide(color: borderColor, width: 1),
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-            ),
+      clipBehavior: Clip.antiAlias,
+      child: SizedBox(
+        width: 320,
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (title.trim().isNotEmpty) ...[
+                Text(
+                  title,
+                  style: theme.textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ) ??
+                      const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                const SizedBox(height: 16),
+              ],
+              ...children,
+            ],
           ),
-          const SizedBox(height: 16),
-          ...children,
-        ],
+        ),
       ),
     );
   }
