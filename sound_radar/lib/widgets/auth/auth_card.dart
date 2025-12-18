@@ -16,8 +16,15 @@ class AuthCard extends StatelessWidget {
       width: 320,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.4),
+        color: const Color(0xFF0F1119),
         borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.35),
+            blurRadius: 20,
+            offset: const Offset(0, 12),
+          ),
+        ],
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,

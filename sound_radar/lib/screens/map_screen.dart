@@ -246,7 +246,7 @@ class _MapScreenState extends State<MapScreen> {
   showDialog(
     context: context,
     barrierDismissible: true,
-    barrierColor: Colors.black.withOpacity(0.4),
+    barrierColor: Colors.black.withValues(alpha: 0.4),
     builder: (_) {
       return Center(
         child: Material(
@@ -483,7 +483,7 @@ class _MyLocationMarker extends StatelessWidget {
           height: 62,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: color.withOpacity(0.18),
+            color: color.withValues(alpha: 0.18),
           ),
         ),
 
@@ -494,7 +494,7 @@ class _MyLocationMarker extends StatelessWidget {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             border: Border.all(
-              color: color.withOpacity(0.95),
+              color: color.withValues(alpha: 0.95),
               width: 3.5,
             ),
           ),
