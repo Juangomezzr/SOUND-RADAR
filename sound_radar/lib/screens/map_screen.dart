@@ -34,7 +34,7 @@ class _MapScreenState extends State<MapScreen> {
       id: 'me',
       name: 'Purple',
       description: 'Example description based on last song played.',
-      avatarColorHex: '#A855F7',
+      avatarColorHex: '#7C3AED',
       instagram: 'https://instagram.com/purple',
       xLink: 'https://x.com/purple',
       lastSongs: [
@@ -104,7 +104,7 @@ class _MapScreenState extends State<MapScreen> {
           id: 'u1',
           name: 'Alex',
           description: 'Nearby music lover.',
-          avatarColorHex: '#7C3AED',
+          avatarColorHex: '#A855F7',
           instagram: 'https://instagram.com/alex',
           xLink: 'https://x.com/alex',
           lastSongs: [Song(title: 'Levitating', artist: 'Dua Lipa'),
@@ -391,12 +391,14 @@ class _MapScreenState extends State<MapScreen> {
                 markers: [
                   // my location
                   Marker(
-                    point: _myLatLng!,
-                    width: 22,
-                    height: 22,
-                    child: const Icon(Icons.circle, color: Colors.red, size: 18),
-                  ),
-
+                      point: _myLatLng!,
+                      width: 70,
+                      height: 70,
+                      child: _MyLocationMarker(
+                        color: _colorFromHex(_currentUser.avatarColorHex),
+                        label: _currentUser.name[0],
+                      ),
+                    ),
                   // dummy users
                   ...List.generate(_nearbyUsers.length, (i) {
                     final user = _nearbyUsers[i];
@@ -458,6 +460,69 @@ class _MapScreenState extends State<MapScreen> {
           ),
         ],
       ),
+    );
+  }
+}
+class _MyLocationMarker extends StatelessWidget {
+  final Color color;
+  final String label;
+
+  const _MyLocationMarker({
+    required this.color,
+    required this.label,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        // Glow suave (opcional pero queda muy pro)
+        Container(
+          width: 62,
+          height: 62,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: color.withOpacity(0.18),
+          ),
+        ),
+
+        // Anillo distintivo
+        Container(
+          width: 54,
+          height: 54,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: color.withOpacity(0.95),
+              width: 3.5,
+            ),
+          ),
+        ),
+
+        // Avatar interior (tu "foto": de momento inicial)
+        Container(
+          width: 44,
+          height: 44,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: const Color(0xFF2F2F33),
+            border: Border.all(color: Colors.white24, width: 1),
+          ),
+          child: Center(
+            child: Text(
+              label,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
+
+        
+      ],
     );
   }
 }
