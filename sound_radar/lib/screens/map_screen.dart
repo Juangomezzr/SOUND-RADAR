@@ -33,7 +33,7 @@ class _MapScreenState extends State<MapScreen> {
     _currentUser = User(
       id: 'me',
       name: 'Purple',
-      description: 'Example description based on last song played.',
+      description: '',
       avatarColorHex: '#7C3AED',
       instagram: 'https://instagram.com/purple',
       xLink: 'https://x.com/purple',

@@ -6,6 +6,7 @@ version: 0.1.0
 environment:
   sdk: ^3.10.1
 
+# Gemini: set API key via --dart-define=GEMINI_API_KEY=...
 dependencies:
   flutter:
     sdk: flutter

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/user.dart';
 import '../widgets/profile/song_tile.dart';
+import '../services/gemini_service.dart';
 
 class ProfileScreen extends StatefulWidget {
   final User user;
@@ -16,6 +17,9 @@ class _ProfileScreenState extends State<ProfileScreen>
   late AnimationController _controller;
   late Animation<double> _animation;
   double _dragOffsetX = 0.0; // desplazamiento actual en X
+  late String _description;
+  bool _loadingDescription = false;
+  final GeminiService _gemini = const GeminiService();
 
   @override
   void initState() {
@@ -24,12 +28,61 @@ class _ProfileScreenState extends State<ProfileScreen>
       vsync: this,
       duration: const Duration(milliseconds: 200),
     );
+
+    _description = widget.user.description.trim().isEmpty
+        ? _fallbackDescription(widget.user)
+        : widget.user.description.trim();
+
+    _maybeGenerateDescription();
   }
 
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  String _fallbackDescription(User user) {
+    final artists = user.lastSongs.map((s) => s.artist).toList();
+    final unique = <String>{};
+    final top = <String>[];
+    for (final artist in artists) {
+      if (unique.add(artist)) top.add(artist);
+      if (top.length == 3) break;
+    }
+    if (top.isEmpty) return 'Explorando música nueva últimamente.';
+    if (top.length == 1) return 'Últimamente escuchando mucho a ${top[0]}.';
+    if (top.length == 2) {
+      return 'Últimamente entre ${top[0]} y ${top[1]}.';
+    }
+    return 'Últimamente entre ${top[0]}, ${top[1]} y ${top[2]}.';
+  }
+
+  Future<void> _maybeGenerateDescription() async {
+    if (widget.user.lastSongs.isEmpty) return;
+    if (_loadingDescription) return;
+
+    setState(() {
+      _loadingDescription = true;
+    });
+
+    try {
+      final generated = await _gemini.generateUserDescriptionFromSongs(
+        widget.user.lastSongs,
+        language: 'es',
+      );
+      if (!mounted) return;
+      setState(() {
+        _description = generated;
+      });
+    } catch (_) {
+      // mantenemos fallback/description existente
+    } finally {
+      if (!mounted) return;
+      setState(() {
+        _loadingDescription = false;
+      });
+    }
   }
 
   Color _colorFromHex(String hex) {
@@ -172,7 +225,20 @@ class _ProfileScreenState extends State<ProfileScreen>
                       color: const Color(0xFF3F3F46),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: Text(widget.user.description),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(child: Text(_description)),
+                        if (_loadingDescription) ...[
+                          const SizedBox(width: 12),
+                          const SizedBox(
+                            width: 16,
+                            height: 16,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          ),
+                        ],
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 16),
                   const Text(
