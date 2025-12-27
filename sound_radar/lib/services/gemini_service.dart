@@ -8,7 +8,7 @@ import '../config/secrets.dart' as secrets;
 import '../models/song.dart';
 
 class GeminiService {
-  static const String _defaultModel = 'gemini-1.5-flash';
+  static const String _defaultModel = 'gemini-2.0-flash';
 
   const GeminiService();
 
