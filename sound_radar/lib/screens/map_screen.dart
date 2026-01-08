@@ -205,7 +205,7 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   List<LatLng> _generateNearbyPoints(LatLng center, int count) {
-    // offsets ~ 50-250m aprox (depende de latitud)
+    // offsets ~ 50-250m aprox 
     final offsets = <Offset>[
       const Offset(0.0007, 0.0004),
       const Offset(-0.0006, 0.0005),
