@@ -14,7 +14,7 @@ class GeminiService {
 
   Future<String> generateUserDescriptionFromSongs(
     List<Song> songs, {
-    String language = 'es',
+    String language = 'en',
     String model = _defaultModel,
     Duration timeout = const Duration(seconds: 12),
   }) async {
@@ -40,7 +40,7 @@ class GeminiService {
         .map((s) => '- ${s.title} — ${s.artist}')
         .join('\n');
 
-    final prompt = language == 'es'
+    final prompt = language == 'en'
         ? '''
 Escribe una descripción corta (máximo 2 frases) del gusto musical de esta persona basándote SOLO en estas últimas canciones.
 Tono: moderno, amigable, sin exagerar ni mencionar que eres una IA. No uses emojis.

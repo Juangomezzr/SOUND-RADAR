@@ -11,6 +11,8 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   late final TextEditingController _usernameController;
   late final TextEditingController _passwordController;
+  final _formKey = GlobalKey<FormState>();
+  bool _submitting = false;
 
   @override
   void initState() {
@@ -31,6 +33,37 @@ class _LoginScreenState extends State<LoginScreen> {
     final theme = Theme.of(context);
     const background = Color(0xFF18181B);
     const fieldFill = Color(0xFF3F3F46);
+
+    Future<void> submit() async {
+      if (_submitting) return;
+      final valid = _formKey.currentState?.validate() ?? false;
+      if (!valid) return;
+
+      setState(() {
+        _submitting = true;
+      });
+
+      final username = _usernameController.text.trim();
+      final password = _passwordController.text;
+
+      final okUsername = username.toLowerCase() == 'purple';
+      final okPassword = password == 'group1';
+
+      if (okUsername && okPassword) {
+        if (!mounted) return;
+        Navigator.pushReplacementNamed(context, '/map');
+        return;
+      }
+
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Invalid username or password.')),
+      );
+
+      setState(() {
+        _submitting = false;
+      });
+    }
 
     return Scaffold(
       backgroundColor: background,
@@ -54,50 +87,66 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                 ),
                 const SizedBox(height: 24),
-                AuthCard(
-                  title: '',
-                  children: [
-                    TextField(
-                      controller: _usernameController,
-                      decoration: InputDecoration(
-                        labelText: 'Username',
-                        filled: true,
-                        fillColor: fieldFill,
-                        border: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(8)),
-                          borderSide: BorderSide.none,
+                Form(
+                  key: _formKey,
+                  child: AuthCard(
+                    title: '',
+                    children: [
+                      TextFormField(
+                        controller: _usernameController,
+                        textInputAction: TextInputAction.next,
+                        decoration: const InputDecoration(
+                          labelText: 'Username',
+                          filled: true,
+                          fillColor: fieldFill,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                            borderSide: BorderSide.none,
+                          ),
                         ),
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    TextField(
-                      controller: _passwordController,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        labelText: 'Password',
-                        filled: true,
-                        fillColor: fieldFill,
-                        border: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(8)),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          elevation: 0,
-                          shadowColor: Colors.transparent,
-                        ),
-                        onPressed: () {
-                          Navigator.pushReplacementNamed(context, '/map');
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'Username is required.';
+                          }
+                          return null;
                         },
-                        child: const Text('Login'),
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 12),
+                      TextFormField(
+                        controller: _passwordController,
+                        obscureText: true,
+                        textInputAction: TextInputAction.done,
+                        onFieldSubmitted: (_) => submit(),
+                        decoration: const InputDecoration(
+                          labelText: 'Password',
+                          filled: true,
+                          fillColor: fieldFill,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Password is required.';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                            shadowColor: Colors.transparent,
+                          ),
+                          onPressed: _submitting ? null : submit,
+                          child: Text(_submitting ? 'Checking...' : 'Login'),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
