@@ -4,8 +4,8 @@ Sound Radar is an Android app built with Flutter. It shows nearby users on a map
 
 ## Final delivery links
 
-- Application files (ZIP): <ADD_ZIP_LINK>
-- Release APK: <ADD_APK_LINK>
+- Application files (ZIP): <[Google Drive Folder](https://drive.google.com/drive/folders/1euSzAt5f_N9daEFpduoHE2ZlUVm-ndTq?usp=sharing)>
+
 
 ## Install
 

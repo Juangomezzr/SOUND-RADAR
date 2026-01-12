@@ -477,7 +477,7 @@ class _MyLocationMarker extends StatelessWidget {
     return Stack(
       alignment: Alignment.center,
       children: [
-        // Glow suave (opcional pero queda muy pro)
+      
         Container(
           width: 62,
           height: 62,
@@ -487,7 +487,7 @@ class _MyLocationMarker extends StatelessWidget {
           ),
         ),
 
-        // Anillo distintivo
+    
         Container(
           width: 54,
           height: 54,
@@ -500,7 +500,7 @@ class _MyLocationMarker extends StatelessWidget {
           ),
         ),
 
-        // Avatar interior (tu "foto": de momento inicial)
+  
         Container(
           width: 44,
           height: 44,

@@ -4,7 +4,7 @@ class User {
   final String id;
   final String name;
   final String description;
-  final String avatarColorHex; // por simplicidad
+  final String avatarColorHex; 
   final String instagram;
   final String xLink;
   final List<Song> lastSongs;

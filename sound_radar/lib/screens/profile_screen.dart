@@ -76,7 +76,7 @@ class _ProfileScreenState extends State<ProfileScreen>
         _description = generated;
       });
     } catch (_) {
-      // mantenemos fallback/description existente
+      
     } finally {
       if (!mounted) return;
       setState(() {
