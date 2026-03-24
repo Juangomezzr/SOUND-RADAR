@@ -1,1 +1,12 @@
+# IntelliJ-based IDES
+.idea/
+
+# Flutter/Dart
+.dart_tool/
+.packages
+.pub-cache/
+build/
+*.iml
+
+# Miscelanous
 sound_radar.zip
