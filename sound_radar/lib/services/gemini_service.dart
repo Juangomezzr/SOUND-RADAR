@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-import '../config/secrets.dart' as secrets;
 import '../models/song.dart';
 
 class GeminiService {
@@ -31,7 +31,7 @@ class GeminiService {
     final apiKey = _resolveApiKey();
     if (apiKey.isEmpty) {
       throw StateError(
-        'Missing Gemini API key. Set it in lib/config/secrets.dart or run with --dart-define=GEMINI_API_KEY=YOUR_KEY',
+        'Missing Gemini API key. Add GEMINI_API_KEY to sound_radar/.env before running the app.',
       );
     }
 
@@ -120,8 +120,6 @@ $songsText
   }
 
   String _resolveApiKey() {
-    if (secrets.geminiApiKey.trim().isNotEmpty) return secrets.geminiApiKey.trim();
-    const fromDefine = String.fromEnvironment('GEMINI_API_KEY');
-    return fromDefine.trim();
+    return dotenv.env['GEMINI_API_KEY']?.trim() ?? '';
   }
 }

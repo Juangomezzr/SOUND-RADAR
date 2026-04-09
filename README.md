@@ -22,46 +22,63 @@ Sound Radar is a Flutter application that allows users to discover and share mus
 
 ## Getting Started
 
-To get a local copy up and running, follow these simple steps.
+To get a local copy up and running, follow these steps.
 
 ### Prerequisites
 
 - Flutter SDK: [Installation Guide](https://flutter.dev/docs/get-started/install)
-- An API key for Gemini.
+- A Gemini API key
 
 ### Installation
 
-1.  **Clone the repository:**
-    ```sh
-    git clone https://github.com/your_username/sound_radar.git
-    ```
-2.  **Navigate to the project directory:**
-    ```sh
-    cd sound_radar/sound_radar
-    ```
-3.  **Install dependencies:**
-    ```sh
-    flutter pub get
-    ```
-4.  **Run the application:**
-    You need to provide your Gemini API key as a command-line argument.
-    ```sh
-    flutter run --dart-define=GEMINI_API_KEY=YOUR_API_KEY
-    ```
+1. **Clone the repository:**
+   ```sh
+   git clone https://github.com/your_username/sound_radar.git
+   ```
+2. **Navigate to the project directory:**
+   ```sh
+   cd sound_radar/sound_radar
+   ```
+3. **Create your local environment file:**
+   ```sh
+   cp .env.example .env
+   ```
+4. **Add your Gemini API key to `.env`:**
+   ```env
+   GEMINI_API_KEY=YOUR_API_KEY
+   ```
+5. **Install dependencies:**
+   ```sh
+   flutter pub get
+   ```
+6. **Run the application:**
+   ```sh
+   flutter run
+   ```
+
+## Secure Gemini Configuration
+
+The app loads the Gemini key from `sound_radar/.env` using `flutter_dotenv`.
+
+1. Copy `sound_radar/.env.example` to `sound_radar/.env`.
+2. Replace `YOUR_API_KEY` with your real Gemini API key.
+3. Keep `sound_radar/.env` out of git. The repository already ignores it.
+
+
 
 ## Project Structure
 
 The `lib` folder contains the main source code of the application, organized as follows:
 
-```
+```text
 lib/
-├── config/         # Configuration files
-├── models/         # Data models (e.g., User, Song)
-├── screens/        # UI screens (e.g., Login, Map, Profile)
-├── services/       # Business logic and services (e.g., Gemini service)
-├── theme/          # Application theme and styling
-├── widgets/        # Reusable UI components
-└── main.dart       # Main application entry point
+|-- config/         # Configuration files
+|-- models/         # Data models (e.g., User, Song)
+|-- screens/        # UI screens (e.g., Login, Map, Profile)
+|-- services/       # Business logic and services (e.g., Gemini service)
+|-- theme/          # Application theme and styling
+|-- widgets/        # Reusable UI components
+`-- main.dart       # Main application entry point
 ```
 
 ## License

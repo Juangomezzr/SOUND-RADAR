@@ -6,10 +6,10 @@ version: 0.1.0
 environment:
   sdk: ^3.10.1
 
-# Gemini: set API key via --dart-define=GEMINI_API_KEY=...
 dependencies:
   flutter:
     sdk: flutter
+  flutter_dotenv: ^5.2.1
   flutter_map: ^7.0.2
   latlong2: ^0.9.1
   geolocator: ^13.0.1
@@ -21,3 +21,5 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - .env

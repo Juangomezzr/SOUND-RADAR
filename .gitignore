@@ -7,6 +7,8 @@
 .pub-cache/
 build/
 *.iml
+.env
+sound_radar/.env
 
 # Miscelanous
 sound_radar.zip
